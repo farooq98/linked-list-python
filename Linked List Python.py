@@ -25,6 +25,7 @@ class Linked_List:
                 display += str(x.data)
             x = x.next_data
         return display + "]"
+        
 
     def __len__(self):
         return self.__length
