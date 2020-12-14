@@ -69,6 +69,7 @@ class Linked_List:
             raise Exception(f"can not add list and object of type {type(other)}")
 
     def __iter__(self):
+        self.__iterator = self.__head
         return self
 
     def __next__(self):
