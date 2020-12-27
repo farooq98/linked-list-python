@@ -9,7 +9,7 @@ class Linked_List:
     def __init__(self, *args):
         self.__head = None
         self.__tail = None
-        self.__length = 0
+        self.__length = 0 
         self.__iterator = None
         if args != ():
             for i in args:
@@ -31,21 +31,60 @@ class Linked_List:
         return self.__length
 
     def __getitem__(self, index):
-        if not isinstance(index, int):
-            raise TypeError("list indexes must be inetgers")
+        if isinstance(index, int):
+            index = self.__neg_index_chk(index)
+            
+            if index < self.__length:
+                x = self.__head
+                i = 0
+                while x:
+                    if i == index:
+                        return x.data
+                    x = x.next_data
+                    i += 1
+            else:
+                raise IndexError("index Out of range")
 
-        index = self.__neg_index_chk(index)
-        
-        if index < self.__length:
-            x = self.__head
-            i = 0
-            while x:
-                if i == index:
-                    return x.data
-                x = x.next_data
-                i += 1
-        else:
-            raise IndexError("index Out of range")
+        if isinstance(index, slice):
+            obj = Linked_List()
+
+            if index.start == None and index.stop == None and index.step == None:
+                return self.copy()
+
+            if index.start == None and index.stop != None:
+                if index.step != None:
+                    for i in range(0, index.stop, index.step):
+                        obj.append(self[i])
+                    return obj
+                else:
+                    for i in range(0, index.stop):
+                        obj.append(self[i])
+                    return obj
+
+            if index.stop == None and index.start != None:
+                if index.step != None:
+                    for i in range(index.start, self.__length, index.step):
+                        obj.append(self[i])
+                    return obj
+                else:
+                    for i in range(index.start, self.__length):
+                        obj.append(self[i])
+                    return obj
+
+            if index.start != None and index.stop != None:
+                if index.step != None:
+                    for i in range(index.start, index.stop, index.step):
+                        obj.append(self[i])
+                    return obj
+                else:
+                    for i in range(index.start, index.stop):
+                        obj.append(self[i])
+                    return obj
+
+            if index.step != None and index.start == None and index.stop == None:
+                for i in range(0, self.__length, index.step):
+                    obj.append(self[i])
+                return obj
 
     def __setitem__(self, index, data):
         self.__insert(index, data, "setitem")
@@ -133,6 +172,7 @@ class Linked_List:
             else:
                 raise IndexError("list index out of range")
             return index
+        return index
 
     def append(self, data):
         x = Node(data)
@@ -269,5 +309,6 @@ class Linked_List:
 
 if __name__ == "__main__":
     lst = Linked_List(1,99,5,6)
-    x = lst + (5,6,48,45)
+    x = lst + (7,8,48,45)
     print(x)
+    print(x[:])
